@@ -1,7 +1,9 @@
 from django.contrib.auth.models import User
-from django.shortcuts import render
+from django.http import HttpResponse
+from django.template import Template, Context
+from django.template.loader import get_template, TemplateDoesNotExist
 
-from common_dibbs.config import Configuration
+from common_dibbs.config.configuration import Configuration
 
 
 class ClientAuthenticationBackend(object):
@@ -28,6 +30,21 @@ class ClientAuthenticationBackend(object):
             "token": result.token
         }
 
+default_redirect_form_value = """<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Redirection to authentication server</title>
+</head>
+<body>
+    <form id="redirect_form" action="{{ cas_service_target_url }}" method="POST">
+        <input type="hidden" name="session_key" value="{{ session_key }}">
+        <input type="hidden" name="redirect_url" value="{{ redirect_url }}">
+        <button type="submit">You will be redirected to the authentication server</button>
+    </form>
+</body>
+</html>
+"""
 
 class CentralAuthenticationMiddleware(object):
     def process_request(self, request):
@@ -49,13 +66,22 @@ class CentralAuthenticationMiddleware(object):
         cas_service_target_url = "%s" % (Configuration().get_central_authentication_service_url(), )
 
         data = {
+            "request": request,
             "session_key": session_key,
             "redirect_url": redirect_url,
             "cas_service_target_url": cas_service_target_url
         }
 
+        try:
+            t = get_template("redirect_form.html")
+        except TemplateDoesNotExist:
+            t = Template(default_redirect_form_value)
+
+        c = Context(data)
+        html_source = str(t.render(c))
+
         # Redirection via a form
-        return render(request, "redirect_form.html", data)
+        return HttpResponse(html_source)
 
 LOGGED_USERS = {
 
