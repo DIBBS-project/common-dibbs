@@ -3,31 +3,35 @@ from django.http import HttpResponse
 from django.template import Template, Context
 from django.template.loader import get_template, TemplateDoesNotExist
 
+from django.shortcuts import redirect
+
 from common_dibbs.config.configuration import Configuration
+import base64
+import requests
 
 
 class ClientAuthenticationBackend(object):
     def authenticate(self, username=None, password=None, session_key=None):
-        from common_dibbs.clients.cas_client.apis.authentication_api import AuthenticationApi
 
-        # Create a client for Authentication
-        operations_client = AuthenticationApi()
-        operations_client.api_client.host = "%s" % (Configuration().get_central_authentication_service_url(),)
-
-        result = operations_client.authenticate_post(**{
+        data = {
             "username": username,
             "password": password,
             "session_key": session_key,
-        })
+        }
+
+        result = None
+        response = requests.post("%s/authenticate/" % (Configuration().get_central_authentication_service_url()), data=data)
+        if response.status_code < 400:
+            result = response.json()
 
         user = None
-        if result.response:
+        if result and result["response"]:
             user = User()
-            user.username = result.username
+            user.username = result["username"]
 
         return {
             "user": user,
-            "token": result.token
+            "token": result["token"]
         }
 
 default_redirect_form_value = """<!DOCTYPE html>
@@ -46,12 +50,17 @@ default_redirect_form_value = """<!DOCTYPE html>
 </html>
 """
 
+
 class CentralAuthenticationMiddleware(object):
     def process_request(self, request):
-        username = request.META.get('X_USERNAME')
-        password = request.META.get('X_PASSWORD')
         session_key = request.session.session_key
+        username = None
+        password = None
 
+        if 'HTTP_AUTHORIZATION' in request.META and "Basic " in request.META.get('HTTP_AUTHORIZATION'):
+            s = base64.b64decode(request.META.get('HTTP_AUTHORIZATION').split("Basic ")[1])
+            username = s.split(":")[0]
+            password = s.split(":")[1]
         auth_backend = ClientAuthenticationBackend()
 
         # Check if the current session has already been authenticated by the CAS: authentication is successful
@@ -82,6 +91,21 @@ class CentralAuthenticationMiddleware(object):
 
         # Redirection via a form
         return HttpResponse(html_source)
+
+
+def session_logout_view(request):
+
+    session_key = request.session.session_key
+    data = {
+        "session_key": session_key,
+    }
+
+    result = None
+    response = requests.post("%s/session_logout/" % (Configuration().get_central_authentication_service_url()), data=data)
+    if response.status_code < 400:
+        result = response.json()
+    return redirect("/")
+
 
 LOGGED_USERS = {
 

@@ -121,17 +121,17 @@ class AuthenticationApi(object):
         path_params = {}
 
         query_params = {}
-        if 'username' in params:
-            query_params['username'] = params['username']
-        if 'password' in params:
-            query_params['password'] = params['password']
-        if 'session_key' in params:
-            query_params['session_key'] = params['session_key']
 
         header_params = {}
 
         form_params = []
         local_var_files = {}
+        if 'username' in params:
+            form_params.append(('username', params['username']))
+        if 'password' in params:
+            form_params.append(('password', params['password']))
+        if 'session_key' in params:
+            form_params.append(('session_key', params['session_key']))
 
         body_params = None
 
