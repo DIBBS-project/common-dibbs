@@ -67,6 +67,7 @@ class ExecutionsApi(object):
         :param callback function: The callback function
             for asynchronous request. (optional)
         :param int id: ID of the execution (required)
+        :param int hints: Optional hints that will help to choose where to run the execution
         :return: Status
                  If the method is called asynchronously,
                  returns the request thread.
@@ -94,12 +95,13 @@ class ExecutionsApi(object):
         :param callback function: The callback function
             for asynchronous request. (optional)
         :param int id: ID of the execution (required)
+        :param int hints: Optional hints that will help to choose where to run the execution
         :return: Status
                  If the method is called asynchronously,
                  returns the request thread.
         """
 
-        all_params = ['id']
+        all_params = ['id', 'hints']
         all_params.append('callback')
         all_params.append('_return_http_data_only')
 
@@ -118,12 +120,16 @@ class ExecutionsApi(object):
 
         if 'id' in params and params['id'] < 0.0:
             raise ValueError("Invalid value for parameter `id` when calling `exec_id_run_get`, must be a value greater than or equal to `0.0`")
+        if 'hints' in params and params['hints'] < 0.0:
+            raise ValueError("Invalid value for parameter `hints` when calling `exec_id_run_get`, must be a value greater than or equal to `0.0`")
         resource_path = '/exec/{id}/run/'.replace('{format}', 'json')
         path_params = {}
         if 'id' in params:
             path_params['id'] = params['id']
 
         query_params = {}
+        if 'hints' in params:
+            query_params['hints'] = params['hints']
 
         header_params = {}
 
