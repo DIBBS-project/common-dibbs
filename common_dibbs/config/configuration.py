@@ -4,8 +4,8 @@ from os.path import expanduser
 
 
 home = expanduser("~")
-configuration_file_path = "%s/dibbs.json" % (home)
-
+# configuration_file_path = "%s/dibbs.json" % (home)
+configuration_file_path = "/etc/dibbs/dibbs.json"
 
 class Configuration(object):
 
