@@ -26,8 +26,6 @@ from __future__ import absolute_import
 import base64
 import urllib3
 
-from settings import Settings
-
 try:
     import httplib
 except ImportError:
@@ -63,7 +61,7 @@ class Configuration(object):
         Constructor
         """
         # Default Base url
-        self.host = Settings().appliance_registry_url
+        self.host = "http://127.0.0.1:8003"
         # Default api client
         self.api_client = None
         # Temp file folder for downloading files
