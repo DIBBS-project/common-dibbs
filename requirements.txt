@@ -1,2 +1,5 @@
 django>=1.8.0
 django-cas-client==1.2.0
+six
+urllib3
+certifi
