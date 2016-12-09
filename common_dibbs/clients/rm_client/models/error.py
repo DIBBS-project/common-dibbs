@@ -51,6 +51,7 @@ class Error(object):
 
         self._detail = detail
 
+
     @property
     def detail(self):
         """

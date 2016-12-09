@@ -54,6 +54,7 @@ class TemporaryAccountCredential(object):
         self._username = username
         self._password = password
 
+
     @property
     def username(self):
         """

@@ -57,6 +57,7 @@ class CredentialPatch(object):
         self._name = name
         self._credentials = credentials
 
+
     @property
     def site_name(self):
         """

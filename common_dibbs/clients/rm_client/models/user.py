@@ -81,6 +81,7 @@ class User(object):
         self._is_active = is_active
         self._date_joined = date_joined
 
+
     @property
     def id(self):
         """

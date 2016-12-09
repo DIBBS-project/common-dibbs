@@ -51,6 +51,7 @@ class PublicKey(object):
 
         self._public_key = public_key
 
+
     @property
     def public_key(self):
         """

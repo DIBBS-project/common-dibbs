@@ -96,6 +96,7 @@ class Cluster(object):
         self._appliance = appliance
         self._appliance_impl = appliance_impl
 
+
     @property
     def id(self):
         """

@@ -63,6 +63,7 @@ class UserPatch(object):
         self._last_name = last_name
         self._email = email
 
+
     @property
     def username(self):
         """

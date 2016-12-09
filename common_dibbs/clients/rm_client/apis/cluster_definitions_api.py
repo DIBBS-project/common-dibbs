@@ -100,6 +100,8 @@ class ClusterDefinitionsApi(object):
         all_params = []
         all_params.append('callback')
         all_params.append('_return_http_data_only')
+        all_params.append('_preload_content')
+        all_params.append('_request_timeout')
 
         params = locals()
         for key, val in iteritems(params['kwargs']):
@@ -110,6 +112,9 @@ class ClusterDefinitionsApi(object):
                 )
             params[key] = val
         del params['kwargs']
+
+
+        collection_formats = {}
 
         resource_path = '/clusters/'.replace('{format}', 'json')
         path_params = {}
@@ -146,7 +151,10 @@ class ClusterDefinitionsApi(object):
                                             response_type='list[Cluster]',
                                             auth_settings=auth_settings,
                                             callback=params.get('callback'),
-                                            _return_http_data_only=params.get('_return_http_data_only'))
+                                            _return_http_data_only=params.get('_return_http_data_only'),
+                                            _preload_content=params.get('_preload_content', True),
+                                            _request_timeout=params.get('_request_timeout'),
+                                            collection_formats=collection_formats)
 
     def clusters_id_add_host_post(self, id, **kwargs):
         """
@@ -199,6 +207,8 @@ class ClusterDefinitionsApi(object):
         all_params = ['id']
         all_params.append('callback')
         all_params.append('_return_http_data_only')
+        all_params.append('_preload_content')
+        all_params.append('_request_timeout')
 
         params = locals()
         for key, val in iteritems(params['kwargs']):
@@ -215,6 +225,9 @@ class ClusterDefinitionsApi(object):
 
         if 'id' in params and params['id'] < 0.0:
             raise ValueError("Invalid value for parameter `id` when calling `clusters_id_add_host_post`, must be a value greater than or equal to `0.0`")
+
+        collection_formats = {}
+
         resource_path = '/clusters/{id}/add_host/'.replace('{format}', 'json')
         path_params = {}
         if 'id' in params:
@@ -252,7 +265,10 @@ class ClusterDefinitionsApi(object):
                                             response_type='Cluster',
                                             auth_settings=auth_settings,
                                             callback=params.get('callback'),
-                                            _return_http_data_only=params.get('_return_http_data_only'))
+                                            _return_http_data_only=params.get('_return_http_data_only'),
+                                            _preload_content=params.get('_preload_content', True),
+                                            _request_timeout=params.get('_request_timeout'),
+                                            collection_formats=collection_formats)
 
     def clusters_id_delete(self, id, **kwargs):
         """
@@ -305,6 +321,8 @@ class ClusterDefinitionsApi(object):
         all_params = ['id']
         all_params.append('callback')
         all_params.append('_return_http_data_only')
+        all_params.append('_preload_content')
+        all_params.append('_request_timeout')
 
         params = locals()
         for key, val in iteritems(params['kwargs']):
@@ -321,6 +339,9 @@ class ClusterDefinitionsApi(object):
 
         if 'id' in params and params['id'] < 0.0:
             raise ValueError("Invalid value for parameter `id` when calling `clusters_id_delete`, must be a value greater than or equal to `0.0`")
+
+        collection_formats = {}
+
         resource_path = '/clusters/{id}/'.replace('{format}', 'json')
         path_params = {}
         if 'id' in params:
@@ -358,7 +379,10 @@ class ClusterDefinitionsApi(object):
                                             response_type=None,
                                             auth_settings=auth_settings,
                                             callback=params.get('callback'),
-                                            _return_http_data_only=params.get('_return_http_data_only'))
+                                            _return_http_data_only=params.get('_return_http_data_only'),
+                                            _preload_content=params.get('_preload_content', True),
+                                            _request_timeout=params.get('_request_timeout'),
+                                            collection_formats=collection_formats)
 
     def clusters_id_get(self, id, **kwargs):
         """
@@ -411,6 +435,8 @@ class ClusterDefinitionsApi(object):
         all_params = ['id']
         all_params.append('callback')
         all_params.append('_return_http_data_only')
+        all_params.append('_preload_content')
+        all_params.append('_request_timeout')
 
         params = locals()
         for key, val in iteritems(params['kwargs']):
@@ -427,6 +453,9 @@ class ClusterDefinitionsApi(object):
 
         if 'id' in params and params['id'] < 0.0:
             raise ValueError("Invalid value for parameter `id` when calling `clusters_id_get`, must be a value greater than or equal to `0.0`")
+
+        collection_formats = {}
+
         resource_path = '/clusters/{id}/'.replace('{format}', 'json')
         path_params = {}
         if 'id' in params:
@@ -464,7 +493,10 @@ class ClusterDefinitionsApi(object):
                                             response_type='Cluster',
                                             auth_settings=auth_settings,
                                             callback=params.get('callback'),
-                                            _return_http_data_only=params.get('_return_http_data_only'))
+                                            _return_http_data_only=params.get('_return_http_data_only'),
+                                            _preload_content=params.get('_preload_content', True),
+                                            _request_timeout=params.get('_request_timeout'),
+                                            collection_formats=collection_formats)
 
     def clusters_id_new_account_post(self, id, **kwargs):
         """
@@ -517,6 +549,8 @@ class ClusterDefinitionsApi(object):
         all_params = ['id']
         all_params.append('callback')
         all_params.append('_return_http_data_only')
+        all_params.append('_preload_content')
+        all_params.append('_request_timeout')
 
         params = locals()
         for key, val in iteritems(params['kwargs']):
@@ -533,6 +567,9 @@ class ClusterDefinitionsApi(object):
 
         if 'id' in params and params['id'] < 0.0:
             raise ValueError("Invalid value for parameter `id` when calling `clusters_id_new_account_post`, must be a value greater than or equal to `0.0`")
+
+        collection_formats = {}
+
         resource_path = '/clusters/{id}/new_account/'.replace('{format}', 'json')
         path_params = {}
         if 'id' in params:
@@ -570,7 +607,10 @@ class ClusterDefinitionsApi(object):
                                             response_type='TemporaryAccountCredential',
                                             auth_settings=auth_settings,
                                             callback=params.get('callback'),
-                                            _return_http_data_only=params.get('_return_http_data_only'))
+                                            _return_http_data_only=params.get('_return_http_data_only'),
+                                            _preload_content=params.get('_preload_content', True),
+                                            _request_timeout=params.get('_request_timeout'),
+                                            collection_formats=collection_formats)
 
     def clusters_id_put(self, id, data, **kwargs):
         """
@@ -625,6 +665,8 @@ class ClusterDefinitionsApi(object):
         all_params = ['id', 'data']
         all_params.append('callback')
         all_params.append('_return_http_data_only')
+        all_params.append('_preload_content')
+        all_params.append('_request_timeout')
 
         params = locals()
         for key, val in iteritems(params['kwargs']):
@@ -644,6 +686,9 @@ class ClusterDefinitionsApi(object):
 
         if 'id' in params and params['id'] < 0.0:
             raise ValueError("Invalid value for parameter `id` when calling `clusters_id_put`, must be a value greater than or equal to `0.0`")
+
+        collection_formats = {}
+
         resource_path = '/clusters/{id}/'.replace('{format}', 'json')
         path_params = {}
         if 'id' in params:
@@ -683,7 +728,10 @@ class ClusterDefinitionsApi(object):
                                             response_type='Cluster',
                                             auth_settings=auth_settings,
                                             callback=params.get('callback'),
-                                            _return_http_data_only=params.get('_return_http_data_only'))
+                                            _return_http_data_only=params.get('_return_http_data_only'),
+                                            _preload_content=params.get('_preload_content', True),
+                                            _request_timeout=params.get('_request_timeout'),
+                                            collection_formats=collection_formats)
 
     def clusters_id_remove_host_post(self, id, **kwargs):
         """
@@ -736,6 +784,8 @@ class ClusterDefinitionsApi(object):
         all_params = ['id']
         all_params.append('callback')
         all_params.append('_return_http_data_only')
+        all_params.append('_preload_content')
+        all_params.append('_request_timeout')
 
         params = locals()
         for key, val in iteritems(params['kwargs']):
@@ -752,6 +802,9 @@ class ClusterDefinitionsApi(object):
 
         if 'id' in params and params['id'] < 0.0:
             raise ValueError("Invalid value for parameter `id` when calling `clusters_id_remove_host_post`, must be a value greater than or equal to `0.0`")
+
+        collection_formats = {}
+
         resource_path = '/clusters/{id}/remove_host/'.replace('{format}', 'json')
         path_params = {}
         if 'id' in params:
@@ -789,7 +842,10 @@ class ClusterDefinitionsApi(object):
                                             response_type='Cluster',
                                             auth_settings=auth_settings,
                                             callback=params.get('callback'),
-                                            _return_http_data_only=params.get('_return_http_data_only'))
+                                            _return_http_data_only=params.get('_return_http_data_only'),
+                                            _preload_content=params.get('_preload_content', True),
+                                            _request_timeout=params.get('_request_timeout'),
+                                            collection_formats=collection_formats)
 
     def clusters_post(self, data, **kwargs):
         """
@@ -842,6 +898,8 @@ class ClusterDefinitionsApi(object):
         all_params = ['data']
         all_params.append('callback')
         all_params.append('_return_http_data_only')
+        all_params.append('_preload_content')
+        all_params.append('_request_timeout')
 
         params = locals()
         for key, val in iteritems(params['kwargs']):
@@ -855,6 +913,9 @@ class ClusterDefinitionsApi(object):
         # verify the required parameter 'data' is set
         if ('data' not in params) or (params['data'] is None):
             raise ValueError("Missing the required parameter `data` when calling `clusters_post`")
+
+
+        collection_formats = {}
 
         resource_path = '/clusters/'.replace('{format}', 'json')
         path_params = {}
@@ -893,4 +954,7 @@ class ClusterDefinitionsApi(object):
                                             response_type='Cluster',
                                             auth_settings=auth_settings,
                                             callback=params.get('callback'),
-                                            _return_http_data_only=params.get('_return_http_data_only'))
+                                            _return_http_data_only=params.get('_return_http_data_only'),
+                                            _preload_content=params.get('_preload_content', True),
+                                            _request_timeout=params.get('_request_timeout'),
+                                            collection_formats=collection_formats)
