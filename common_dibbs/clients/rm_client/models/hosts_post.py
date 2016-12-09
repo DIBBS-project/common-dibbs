@@ -54,7 +54,6 @@ class HostsPost(object):
         self._cluster_id = cluster_id
         self._name = name
 
-
     @property
     def cluster_id(self):
         """
@@ -75,8 +74,6 @@ class HostsPost(object):
         :param cluster_id: The cluster_id of this HostsPost.
         :type: int
         """
-        if cluster_id is None:
-            raise ValueError("Invalid value for `cluster_id`, must not be `None`")
 
         self._cluster_id = cluster_id
 

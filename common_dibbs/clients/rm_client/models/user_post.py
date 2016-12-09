@@ -63,7 +63,6 @@ class UserPost(object):
         self._last_name = last_name
         self._email = email
 
-
     @property
     def username(self):
         """
@@ -84,8 +83,6 @@ class UserPost(object):
         :param username: The username of this UserPost.
         :type: str
         """
-        if username is None:
-            raise ValueError("Invalid value for `username`, must not be `None`")
 
         self._username = username
 
@@ -109,8 +106,6 @@ class UserPost(object):
         :param password: The password of this UserPost.
         :type: str
         """
-        if password is None:
-            raise ValueError("Invalid value for `password`, must not be `None`")
 
         self._password = password
 

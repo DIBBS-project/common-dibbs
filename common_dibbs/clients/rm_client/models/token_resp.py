@@ -51,7 +51,6 @@ class TokenResp(object):
 
         self._token = token
 
-
     @property
     def token(self):
         """

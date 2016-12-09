@@ -218,6 +218,13 @@ class Configuration(object):
         :return: The Auth Settings information dict.
         """
         return {
+            'basic':
+                {
+                    'type': 'basic',
+                    'in': 'header',
+                    'key': 'Authorization',
+                    'value': self.get_basic_auth_token()
+                },
             'api_key':
                 {
                     'type': 'api_key',
@@ -225,6 +232,7 @@ class Configuration(object):
                     'key': 'Authorization',
                     'value': self.get_api_key_with_prefix('Authorization')
                 },
+
         }
 
     def to_debug_report(self):

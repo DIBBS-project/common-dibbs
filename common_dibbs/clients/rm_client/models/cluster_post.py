@@ -57,7 +57,6 @@ class ClusterPost(object):
         self._appliance = appliance
         self._targeted_slaves_count = targeted_slaves_count
 
-
     @property
     def name(self):
         """
@@ -78,8 +77,6 @@ class ClusterPost(object):
         :param name: The name of this ClusterPost.
         :type: str
         """
-        if name is None:
-            raise ValueError("Invalid value for `name`, must not be `None`")
 
         self._name = name
 
@@ -103,8 +100,6 @@ class ClusterPost(object):
         :param appliance: The appliance of this ClusterPost.
         :type: str
         """
-        if appliance is None:
-            raise ValueError("Invalid value for `appliance`, must not be `None`")
 
         self._appliance = appliance
 
@@ -128,8 +123,6 @@ class ClusterPost(object):
         :param targeted_slaves_count: The targeted_slaves_count of this ClusterPost.
         :type: int
         """
-        if targeted_slaves_count is None:
-            raise ValueError("Invalid value for `targeted_slaves_count`, must not be `None`")
 
         self._targeted_slaves_count = targeted_slaves_count
 

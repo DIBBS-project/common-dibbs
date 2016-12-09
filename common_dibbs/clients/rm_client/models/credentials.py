@@ -54,7 +54,6 @@ class Credentials(object):
         self._username = username
         self._password = password
 
-
     @property
     def username(self):
         """
@@ -75,8 +74,6 @@ class Credentials(object):
         :param username: The username of this Credentials.
         :type: str
         """
-        if username is None:
-            raise ValueError("Invalid value for `username`, must not be `None`")
 
         self._username = username
 
@@ -100,8 +97,6 @@ class Credentials(object):
         :param password: The password of this Credentials.
         :type: str
         """
-        if password is None:
-            raise ValueError("Invalid value for `password`, must not be `None`")
 
         self._password = password
 

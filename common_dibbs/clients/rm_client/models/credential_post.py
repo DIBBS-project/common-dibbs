@@ -57,7 +57,6 @@ class CredentialPost(object):
         self._name = name
         self._credentials = credentials
 
-
     @property
     def site_name(self):
         """
@@ -78,8 +77,6 @@ class CredentialPost(object):
         :param site_name: The site_name of this CredentialPost.
         :type: str
         """
-        if site_name is None:
-            raise ValueError("Invalid value for `site_name`, must not be `None`")
 
         self._site_name = site_name
 
@@ -103,8 +100,6 @@ class CredentialPost(object):
         :param name: The name of this CredentialPost.
         :type: str
         """
-        if name is None:
-            raise ValueError("Invalid value for `name`, must not be `None`")
 
         self._name = name
 
@@ -128,8 +123,6 @@ class CredentialPost(object):
         :param credentials: The credentials of this CredentialPost.
         :type: str
         """
-        if credentials is None:
-            raise ValueError("Invalid value for `credentials`, must not be `None`")
 
         self._credentials = credentials
 

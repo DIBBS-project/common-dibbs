@@ -240,7 +240,7 @@ class OperationVersionsApi(object):
             select_header_content_type(['application/json'])
 
         # Authentication setting
-        auth_settings = ['api_key', 'basic']
+        auth_settings = ['api_key']
 
         return self.api_client.call_api(resource_path, 'DELETE',
                                             path_params,
@@ -459,7 +459,7 @@ class OperationVersionsApi(object):
             select_header_content_type(['application/json'])
 
         # Authentication setting
-        auth_settings = ['api_key', 'basic']
+        auth_settings = ['api_key']
 
         return self.api_client.call_api(resource_path, 'PATCH',
                                             path_params,
@@ -572,7 +572,7 @@ class OperationVersionsApi(object):
             select_header_content_type(['application/json'])
 
         # Authentication setting
-        auth_settings = ['api_key', 'basic']
+        auth_settings = ['api_key']
 
         return self.api_client.call_api(resource_path, 'PUT',
                                             path_params,
@@ -676,7 +676,7 @@ class OperationVersionsApi(object):
             select_header_content_type(['application/json'])
 
         # Authentication setting
-        auth_settings = ['api_key', 'basic']
+        auth_settings = ['api_key']
 
         return self.api_client.call_api(resource_path, 'POST',
                                             path_params,

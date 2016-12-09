@@ -23,14 +23,19 @@
 """
 
 from __future__ import absolute_import
-
+import base64
 import urllib3
+
+try:
+    import httplib
+except ImportError:
+    # for python3
+    import http.client as httplib
 
 import sys
 import logging
 
 from six import iteritems
-from six.moves import http_client as httplib
 
 
 def singleton(cls, *args, **kw):
@@ -219,13 +224,6 @@ class Configuration(object):
                     'in': 'header',
                     'key': 'Authorization',
                     'value': self.get_api_key_with_prefix('Authorization')
-                },
-            'basic':
-                {
-                    'type': 'basic',
-                    'in': 'header',
-                    'key': 'Authorization',
-                    'value': self.get_basic_auth_token()
                 },
 
         }

@@ -60,7 +60,6 @@ class Credential(object):
         self._user = user
         self._credentials = credentials
 
-
     @property
     def site_name(self):
         """
@@ -81,8 +80,6 @@ class Credential(object):
         :param site_name: The site_name of this Credential.
         :type: str
         """
-        if site_name is None:
-            raise ValueError("Invalid value for `site_name`, must not be `None`")
 
         self._site_name = site_name
 
@@ -106,8 +103,6 @@ class Credential(object):
         :param name: The name of this Credential.
         :type: str
         """
-        if name is None:
-            raise ValueError("Invalid value for `name`, must not be `None`")
 
         self._name = name
 
@@ -131,8 +126,6 @@ class Credential(object):
         :param user: The user of this Credential.
         :type: int
         """
-        if user is None:
-            raise ValueError("Invalid value for `user`, must not be `None`")
 
         self._user = user
 
@@ -156,8 +149,6 @@ class Credential(object):
         :param credentials: The credentials of this Credential.
         :type: str
         """
-        if credentials is None:
-            raise ValueError("Invalid value for `credentials`, must not be `None`")
 
         self._credentials = credentials
 

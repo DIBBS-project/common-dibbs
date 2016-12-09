@@ -63,7 +63,6 @@ class Hosts(object):
         self._instance_ip = instance_ip
         self._cluster_id = cluster_id
 
-
     @property
     def id(self):
         """
