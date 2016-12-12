@@ -30,5 +30,5 @@ Run the following command:
 ```shell
 python setup.py install sdist upload -r pypi
 ```
-*Don't forget to increase the version number of the **setup.py** file*
+*Don't forget to increase the version number of the* **setup.py** *file*
 
