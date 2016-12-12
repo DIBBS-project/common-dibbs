@@ -178,6 +178,10 @@ paths:
           description: No cluster definition with the given Id
           schema:
             $ref: '#/definitions/Error'
+        503:
+          description: The cluster is not ready yet (still bootstrapping)
+          schema:
+            $ref: '#/definitions/Error'
         default:
           description: Unexpected error
           schema:
