@@ -555,6 +555,9 @@ definitions:
       hints:
         type: string
         description: Hints (JSON string) that helps to choose where to run the execution
+      operation_state:
+        type: string
+        description: Current state of the operation execution.
   ExecutionPost:
     type: object
     required:
