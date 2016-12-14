@@ -1,6 +1,16 @@
 # common-dibbs
 
-## Generate clients
+## User's documentation
+
+Install the clients by running the following command:
+
+```shell
+pip install .
+```
+
+## Developer's documentation
+
+### Generate clients
 
 Clients are generated from swagger yaml description files (http://swagger.io/). To generate a swagger client, you will need to install the swagger-codegen project. On MacOS, simply run the following command:
 
@@ -15,7 +25,7 @@ bash rebuild_clients.sh
 ```
 
 
-## Install clients
+### Install clients
 
 Run the following command:
 
