@@ -1,0 +1,62 @@
+
+<h2>Execution</h2>
+<ul class="parameter">
+  <li class="param-required-">id : Integer
+    <br/>Unique identifier representing a specific execution
+  </li>
+</ul>
+<ul class="parameter">
+  <li class="param-required-">author : Integer
+    <br/>Unique ID of the user who created the execution
+  </li>
+</ul>
+<ul class="parameter">
+  <li class="param-required-">operation_instance : Integer
+    <br/>Unique ID of the process instance this execution is of
+  </li>
+</ul>
+<ul class="parameter">
+  <li class="param-required-">callback_url : String
+    <br/>URL called after completion of the job (possibly empty)
+  </li>
+</ul>
+<ul class="parameter">
+  <li class="param-required-">force_spawn_cluster : String
+    <br/>If set and not empty, forces the creation of a new cluster
+  </li>
+</ul>
+<ul class="parameter">
+  <li class="param-required-">creation_date : Date
+    <br/>Date and time of creation of the execution
+  </li>
+</ul>
+<ul class="parameter">
+  <li class="param-required-">status : String
+    <br/>Status of the cluster
+  </li>
+</ul>
+<ul class="parameter">
+  <li class="param-required-">status_info : String
+    <br/>More information about the status of the cluster
+  </li>
+</ul>
+<ul class="parameter">
+  <li class="param-required-">resource_provisioner_token : String
+    <br/>Authentication token to be used to connect to the Resource Provisioner
+  </li>
+</ul>
+<ul class="parameter">
+  <li class="param-required-">output_location : String
+    <br/>Location of the output file of the job on the machine, empty if not yet completed
+  </li>
+</ul>
+<ul class="parameter">
+  <li class="param-required-">hints : String
+    <br/>Hints (JSON string) that helps to choose where to run the execution
+  </li>
+</ul>
+<ul class="parameter">
+  <li class="param-required-">operation_state : String
+    <br/>Current state of the operation execution.
+  </li>
+</ul>

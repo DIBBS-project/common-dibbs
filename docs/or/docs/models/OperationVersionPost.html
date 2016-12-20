@@ -1,0 +1,37 @@
+
+<h2>OperationVersionPost</h2>
+<ul class="parameter">
+  <li class="param-required-true">name : String
+    <br/>Name given to the process implementation
+  </li>
+</ul>
+<ul class="parameter">
+  <li class="param-required-true">appliance : String
+    <br/>Name of the appliance on which the process implementation must be run
+  </li>
+</ul>
+<ul class="parameter">
+  <li class="param-required-true">process_definition : Integer
+    <br/>Id of the process definition linked with this new implementation
+  </li>
+</ul>
+<ul class="parameter">
+  <li class="param-required-">cwd : String
+    <br/>Working directory to be in when ruing the process implementation
+  </li>
+</ul>
+<ul class="parameter">
+  <li class="param-required-true">script : String
+    <br/>Script to execute to run the process on the cluster
+  </li>
+</ul>
+<ul class="parameter">
+  <li class="param-required-true">output_type : String
+    <br/>type of output (e.g. file, stream)
+  </li>
+</ul>
+<ul class="parameter">
+  <li class="param-required-">output_parameters : String
+    <br/>JSON-formatted dictionary containing parameters regarding the output (depending on the output type)
+  </li>
+</ul>

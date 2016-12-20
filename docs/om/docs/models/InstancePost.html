@@ -1,0 +1,22 @@
+
+<h2>InstancePost</h2>
+<ul class="parameter">
+  <li class="param-required-">name : String
+    <br/>Name of the process instance, possibly empty
+  </li>
+</ul>
+<ul class="parameter">
+  <li class="param-required-true">process_definition_id : Integer
+    <br/>Unique ID of the operation on which an instance of the operation must be run
+  </li>
+</ul>
+<ul class="parameter">
+  <li class="param-required-true">parameters : String
+    <br/>JSON-formatted string containing a dictionary mapping a value for each parameter declared in the process definition
+  </li>
+</ul>
+<ul class="parameter">
+  <li class="param-required-true">files : String
+    <br/>JSON-formatted string containing a dictionary mapping each file declared in the process definition to a URL
+  </li>
+</ul>

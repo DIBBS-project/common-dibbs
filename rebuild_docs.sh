@@ -11,5 +11,5 @@ function do_doc () {
 
 for CLIENT in $(ls -1 swagger | cut -d_ -f1)
 do
-    do_doc $CLIENT
+    output=`do_doc $CLIENT 2>&1` || echo $output
 done

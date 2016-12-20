@@ -1,0 +1,37 @@
+
+<h2>Instance</h2>
+<ul class="parameter">
+  <li class="param-required-">id : Integer
+    <br/>Unique identifier representing a specific process instance
+  </li>
+</ul>
+<ul class="parameter">
+  <li class="param-required-">author : Integer
+    <br/>Unique ID of the user who created the process instance
+  </li>
+</ul>
+<ul class="parameter">
+  <li class="param-required-">name : String
+    <br/>Name of the process instance, possibly empty
+  </li>
+</ul>
+<ul class="parameter">
+  <li class="param-required-">process_definition_id : Integer
+    <br/>Unique ID of the operation on which an instance of the operation must be run
+  </li>
+</ul>
+<ul class="parameter">
+  <li class="param-required-">parameters : String
+    <br/>JSON-formatted string containing a dictionary mapping a value for each parameter declared in the process definition
+  </li>
+</ul>
+<ul class="parameter">
+  <li class="param-required-">files : String
+    <br/>JSON-formatted string containing a dictionary mapping each file declared in the process definition to a URL
+  </li>
+</ul>
+<ul class="parameter">
+  <li class="param-required-">creation_date : Date
+    <br/>Date and time of creation of the process instance
+  </li>
+</ul>

@@ -1,0 +1,195 @@
+<div class="main-content">
+  <h2><a name=""></a></h2>
+  <p>This is the  API</p>
+
+  <h2><a name="execIdRunGet"></a>execIdRunGet</h2>
+  <hr>
+  <p></p>
+  <p>Run an already registered execution. </p>
+  <h3 class="section">URL</h3>
+  <code>http://127.0.0.1:8001/exec/{id}/run/</code>
+  <h3 class="section">HTTP Method</h3>
+  <code>GET</code>
+  <h3 class="section">Response Type</h3>
+  <div class="model" data-model="Status"><a href="">Status</a></div>
+  <h3 class="section">Parameters</h3>
+  <ul>
+	  <li class="parameter">
+      
+      
+      <span class="param-in">Path: </span>
+      
+      
+      <span class="param-name">id</span>
+      <span class="param-type">Integer</span>
+      
+      <p class="param-description">ID of the execution</p>
+	  </li>
+	  <li class="parameter">
+      
+      <span class="param-in">Query: </span>
+      
+      
+      
+      <span class="param-name">hints</span>
+      <span class="param-type">Integer</span>
+      
+      <p class="param-description">Optional hints that will help to choose where to run the execution</p>
+	  </li>
+  </ul>
+  <h2><a name="executionsGet"></a>executionsGet</h2>
+  <hr>
+  <p></p>
+  <p>Get the list of all the executions registered. No authentification is required. </p>
+  <h3 class="section">URL</h3>
+  <code>http://127.0.0.1:8001/executions/</code>
+  <h3 class="section">HTTP Method</h3>
+  <code>GET</code>
+  <h3 class="section">Response Type</h3>
+  <div class="model" data-model="Execution"><a href="">List</a></div>
+  <h3 class="section">Parameters</h3>
+  <ul>
+  </ul>
+  <h2><a name="executionsIdDelete"></a>executionsIdDelete</h2>
+  <hr>
+  <p></p>
+  <p>Delete an already existing execution. Authentification is required. </p>
+  <h3 class="section">URL</h3>
+  <code>http://127.0.0.1:8001/executions/{id}/</code>
+  <h3 class="section">HTTP Method</h3>
+  <code>DELETE</code>
+  <h3 class="section">Response Type</h3>
+  <div class="model" data-model=""><a href=""></a></div>
+  <h3 class="section">Parameters</h3>
+  <ul>
+	  <li class="parameter">
+      
+      
+      <span class="param-in">Path: </span>
+      
+      
+      <span class="param-name">id</span>
+      <span class="param-type">Integer</span>
+      
+      <p class="param-description">ID of the execution</p>
+	  </li>
+  </ul>
+  <h2><a name="executionsIdGet"></a>executionsIdGet</h2>
+  <hr>
+  <p></p>
+  <p>Get a single execution. Authentification is required. </p>
+  <h3 class="section">URL</h3>
+  <code>http://127.0.0.1:8001/executions/{id}/</code>
+  <h3 class="section">HTTP Method</h3>
+  <code>GET</code>
+  <h3 class="section">Response Type</h3>
+  <div class="model" data-model="Execution"><a href="">Execution</a></div>
+  <h3 class="section">Parameters</h3>
+  <ul>
+	  <li class="parameter">
+      
+      
+      <span class="param-in">Path: </span>
+      
+      
+      <span class="param-name">id</span>
+      <span class="param-type">Integer</span>
+      
+      <p class="param-description">ID of the execution</p>
+	  </li>
+  </ul>
+  <h2><a name="executionsIdPatch"></a>executionsIdPatch</h2>
+  <hr>
+  <p></p>
+  <p>Modify an already existing execution. Authentification is required. </p>
+  <h3 class="section">URL</h3>
+  <code>http://127.0.0.1:8001/executions/{id}/</code>
+  <h3 class="section">HTTP Method</h3>
+  <code>PATCH</code>
+  <h3 class="section">Response Type</h3>
+  <div class="model" data-model="Execution"><a href="">Execution</a></div>
+  <h3 class="section">Parameters</h3>
+  <ul>
+	  <li class="parameter">
+      
+      
+      <span class="param-in">Path: </span>
+      
+      
+      <span class="param-name">id</span>
+      <span class="param-type">Integer</span>
+      
+      <p class="param-description">ID of the execution</p>
+	  </li>
+	  <li class="parameter">
+      
+      
+      
+      
+      <span class="param-in">Body: </span>
+      <span class="param-name">data</span>
+      <span class="param-type">ExecutionPatch(ExecutionPatch)</span>
+      
+      <p class="param-description">Execution</p>
+	  </li>
+  </ul>
+  <h2><a name="executionsIdPut"></a>executionsIdPut</h2>
+  <hr>
+  <p></p>
+  <p>Redefine an already existing execution. Authentification is required. </p>
+  <h3 class="section">URL</h3>
+  <code>http://127.0.0.1:8001/executions/{id}/</code>
+  <h3 class="section">HTTP Method</h3>
+  <code>PUT</code>
+  <h3 class="section">Response Type</h3>
+  <div class="model" data-model="Execution"><a href="">Execution</a></div>
+  <h3 class="section">Parameters</h3>
+  <ul>
+	  <li class="parameter">
+      
+      
+      <span class="param-in">Path: </span>
+      
+      
+      <span class="param-name">id</span>
+      <span class="param-type">Integer</span>
+      
+      <p class="param-description">ID of the execution</p>
+	  </li>
+	  <li class="parameter">
+      
+      
+      
+      
+      <span class="param-in">Body: </span>
+      <span class="param-name">data</span>
+      <span class="param-type">ExecutionPost(ExecutionPost)</span>
+      
+      <p class="param-description">Execution</p>
+	  </li>
+  </ul>
+  <h2><a name="executionsPost"></a>executionsPost</h2>
+  <hr>
+  <p></p>
+  <p>Register a new execution. Authentification is required. </p>
+  <h3 class="section">URL</h3>
+  <code>http://127.0.0.1:8001/executions/</code>
+  <h3 class="section">HTTP Method</h3>
+  <code>POST</code>
+  <h3 class="section">Response Type</h3>
+  <div class="model" data-model="Execution"><a href="">Execution</a></div>
+  <h3 class="section">Parameters</h3>
+  <ul>
+	  <li class="parameter">
+      
+      
+      
+      
+      <span class="param-in">Body: </span>
+      <span class="param-name">data</span>
+      <span class="param-type">ExecutionPost(ExecutionPost)</span>
+      
+      <p class="param-description">Execution</p>
+	  </li>
+  </ul>
+</div>
