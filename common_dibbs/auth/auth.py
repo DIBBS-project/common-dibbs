@@ -1,12 +1,14 @@
+# coding: utf-8
+from __future__ import absolute_import, print_function
+
+import base64
+
+from django.conf import settings
 from django.contrib.auth.models import User
 from django.http import HttpResponse
+from django.shortcuts import redirect
 from django.template import Template, Context
 from django.template.loader import get_template, TemplateDoesNotExist
-
-from django.shortcuts import redirect
-
-from common_dibbs.config.configuration import Configuration
-import base64
 import requests
 
 
@@ -20,7 +22,7 @@ class ClientAuthenticationBackend(object):
         }
 
         result = None
-        response = requests.post("%s/authenticate/" % (Configuration().get_central_authentication_service_url()), data=data)
+        response = requests.post("%s/authenticate/" % (settings.DIBBS['urls']['cas']), data=data)
         if response.status_code < 400:
             result = response.json()
 
@@ -72,13 +74,12 @@ class CentralAuthenticationMiddleware(object):
 
         # Do a web redirection to the CAS service
         redirect_url = "http://%s%s" % (request.META.get('HTTP_HOST'), request.path)
-        cas_service_target_url = "%s" % (Configuration().get_central_authentication_service_url(), )
 
         data = {
             "request": request,
             "session_key": session_key,
             "redirect_url": redirect_url,
-            "cas_service_target_url": cas_service_target_url
+            "cas_service_target_url": settings.DIBBS['urls']['cas']
         }
 
         try:
@@ -101,7 +102,7 @@ def session_logout_view(request):
     }
 
     result = None
-    response = requests.post("%s/session_logout/" % (Configuration().get_central_authentication_service_url()), data=data)
+    response = requests.post("%s/session_logout/" % (settings.DIBBS['urls']['cas']), data=data)
     if response.status_code < 400:
         result = response.json()
     return redirect("/")
