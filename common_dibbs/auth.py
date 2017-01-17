@@ -2,39 +2,50 @@
 from __future__ import absolute_import, print_function
 
 import base64
+import json
+import logging
 
 from django.conf import settings
-from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
 from django.http import HttpResponse
 from django.shortcuts import redirect
 from django.template import Template, Context
 from django.template.loader import get_template, TemplateDoesNotExist
 import requests
 
+from .misc import TEMP_NAME_DJMETA
 
-class ClientAuthenticationBackend(object):
-    def authenticate(self, username=None, password=None, session_key=None):
 
-        data = {
-            "username": username,
-            "password": password,
-            "session_key": session_key,
-        }
+__all__ = [
+    'CentralAuthenticationMiddleware',
+    'DibbsUserMiddleware',
+    'session_logout_view',
+]
 
-        result = None
-        response = requests.post("%s/authenticate/" % (settings.DIBBS['urls']['cas']), data=data)
-        if response.status_code < 400:
-            result = response.json()
+logger = logging.getLogger(__name__)
 
-        user = None
-        if result and result["response"]:
-            user = User()
-            user.username = result["username"]
 
-        return {
-            "user": user,
-            "token": result["token"]
-        }
+def authenticate(username=None, password=None, session_key=None):
+    data = {
+        "username": username,
+        "password": password,
+        "session_key": session_key,
+    }
+
+    result = None
+    response = requests.post("{}/authenticate/".format(settings.DIBBS['urls']['cas']), data=data)
+    if response.status_code < 400:
+        result = response.json()
+
+    user = None
+    if result and result["response"]:
+        user = get_user_model()
+        user.username = result["username"]
+
+    return {
+        "user": user,
+        "token": result["token"]
+    }
 
 default_redirect_form_value = """<!DOCTYPE html>
 <html lang="en">
@@ -54,6 +65,10 @@ default_redirect_form_value = """<!DOCTYPE html>
 
 
 class CentralAuthenticationMiddleware(object):
+    def __init__(self, *args, **kwargs):
+        super(CentralAuthenticationMiddleware, self).__init__(*args, **kwargs)
+        self.logger = logging.getLogger('{}.{}'.format(__name__, self.__class__.__name__))
+
     def process_request(self, request):
         session_key = request.session.session_key
         username = None
@@ -63,10 +78,9 @@ class CentralAuthenticationMiddleware(object):
             s = base64.b64decode(request.META.get('HTTP_AUTHORIZATION').split("Basic ")[1])
             username = s.split(":")[0]
             password = s.split(":")[1]
-        auth_backend = ClientAuthenticationBackend()
 
         # Check if the current session has already been authenticated by the CAS: authentication is successful
-        authentication_resp = auth_backend.authenticate(username, password, session_key)
+        authentication_resp = authenticate(username, password, session_key)
 
         if authentication_resp["user"] is not None and authentication_resp["user"].username not in ["", "anonymous"]:
             request.user = authentication_resp["user"]
@@ -94,6 +108,25 @@ class CentralAuthenticationMiddleware(object):
         return HttpResponse(html_source)
 
 
+class DibbsUserMiddleware(object):
+    def __init__(self, *args, **kwargs):
+        super(DibbsUserMiddleware, self).__init__(*args, **kwargs)
+        self.logger = logging.getLogger('{}.{}'.format(__name__, self.__class__.__name__))
+
+    def process_request(self, request):
+        try:
+            obo_payload = request.META[TEMP_NAME_DJMETA]
+        except KeyError:
+            obo_user = None
+        else:
+            obo_data = json.loads(base64.urlsafe_b64decode(obo_payload))
+            obo_user = obo_data['user']
+
+        self.logger.info('obo-user: {}'.format(obo_user))
+
+        request.dibbs_user = obo_user
+
+
 def session_logout_view(request):
 
     session_key = request.session.session_key
@@ -106,8 +139,3 @@ def session_logout_view(request):
     if response.status_code < 400:
         result = response.json()
     return redirect("/")
-
-
-LOGGED_USERS = {
-
-}
