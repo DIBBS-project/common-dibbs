@@ -1,141 +1,31 @@
 # coding: utf-8
-from __future__ import absolute_import, print_function
+from __future__ import absolute_import
 
 import base64
 import json
-import logging
 
-from django.conf import settings
-from django.contrib.auth import get_user_model
-from django.http import HttpResponse
-from django.shortcuts import redirect
-from django.template import Template, Context
-from django.template.loader import get_template, TemplateDoesNotExist
-import requests
-
-from .misc import TEMP_NAME_DJMETA
+from . import names
 
 
-__all__ = [
-    'CentralAuthenticationMiddleware',
-    'DibbsUserMiddleware',
-    'session_logout_view',
-]
+def swagger_basic_auth(swagger_client, username, password):
+    authentication_string = '{}:{}'.format(username, password)
+    base64_authentication_string = base64.b64encode(authentication_string.encode('utf-8'))
+    header_key = "Authorization"
+    header_value = "Basic {}".format(base64_authentication_string)
+    swagger_client.api_client.default_headers[header_key] = header_value
 
-logger = logging.getLogger(__name__)
+
+def enc_token(token):
+    return b'Bearer {}'.format(base64.urlsafe_b64encode(json.dumps(token).encode('utf-8')).decode('ascii'))
 
 
-def authenticate(username=None, password=None, session_key=None):
-    data = {
-        "username": username,
-        "password": password,
-        "session_key": session_key,
-    }
-
-    result = None
-    response = requests.post("{}/authenticate/".format(settings.DIBBS['urls']['cas']), data=data)
-    if response.status_code < 400:
-        result = response.json()
-
-    user = None
-    if result and result["response"]:
-        user = get_user_model()
-        user.username = result["username"]
+def client_auth_headers(username, password=None):
+    """
+    This generates an UNSIGNED token, i.e. FIX ME (and the thing that consumes
+    it)
+    """
+    token = enc_token({'dibbs_user': username, 'password': password})
 
     return {
-        "user": user,
-        "token": result["token"]
+        names.AUTHORIZATION_HEADER: token,
     }
-
-default_redirect_form_value = """<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Redirection to authentication server</title>
-</head>
-<body>
-    <form id="redirect_form" action="{{ cas_service_target_url }}" method="POST">
-        <input type="hidden" name="session_key" value="{{ session_key }}">
-        <input type="hidden" name="redirect_url" value="{{ redirect_url }}">
-        <button type="submit">You will be redirected to the authentication server</button>
-    </form>
-</body>
-</html>
-"""
-
-
-class CentralAuthenticationMiddleware(object):
-    def __init__(self, *args, **kwargs):
-        super(CentralAuthenticationMiddleware, self).__init__(*args, **kwargs)
-        self.logger = logging.getLogger('{}.{}'.format(__name__, self.__class__.__name__))
-
-    def process_request(self, request):
-        session_key = request.session.session_key
-        username = None
-        password = None
-
-        if 'HTTP_AUTHORIZATION' in request.META and "Basic " in request.META.get('HTTP_AUTHORIZATION'):
-            s = base64.b64decode(request.META.get('HTTP_AUTHORIZATION').split("Basic ")[1])
-            username = s.split(":")[0]
-            password = s.split(":")[1]
-
-        # Check if the current session has already been authenticated by the CAS: authentication is successful
-        authentication_resp = authenticate(username, password, session_key)
-
-        if authentication_resp["user"] is not None and authentication_resp["user"].username not in ["", "anonymous"]:
-            request.user = authentication_resp["user"]
-            return
-
-        # Do a web redirection to the CAS service
-        redirect_url = "http://%s%s" % (request.META.get('HTTP_HOST'), request.path)
-
-        data = {
-            "request": request,
-            "session_key": session_key,
-            "redirect_url": redirect_url,
-            "cas_service_target_url": settings.DIBBS['urls']['cas']
-        }
-
-        try:
-            t = get_template("redirect_form.html")
-        except TemplateDoesNotExist:
-            t = Template(default_redirect_form_value)
-
-        c = Context(data)
-        html_source = str(t.render(c))
-
-        # Redirection via a form
-        return HttpResponse(html_source)
-
-
-class DibbsUserMiddleware(object):
-    def __init__(self, *args, **kwargs):
-        super(DibbsUserMiddleware, self).__init__(*args, **kwargs)
-        self.logger = logging.getLogger('{}.{}'.format(__name__, self.__class__.__name__))
-
-    def process_request(self, request):
-        try:
-            obo_payload = request.META[TEMP_NAME_DJMETA]
-        except KeyError:
-            obo_user = None
-        else:
-            obo_data = json.loads(base64.urlsafe_b64decode(obo_payload))
-            obo_user = obo_data['user']
-
-        self.logger.info('obo-user: {}'.format(obo_user))
-
-        request.dibbs_user = obo_user
-
-
-def session_logout_view(request):
-
-    session_key = request.session.session_key
-    data = {
-        "session_key": session_key,
-    }
-
-    result = None
-    response = requests.post("%s/session_logout/" % (settings.DIBBS['urls']['cas']), data=data)
-    if response.status_code < 400:
-        result = response.json()
-    return redirect("/")
