@@ -16,7 +16,12 @@ def swagger_basic_auth(swagger_client, username, password):
 
 
 def enc_token(token):
-    return b'Bearer {}'.format(base64.urlsafe_b64encode(json.dumps(token).encode('utf-8')).decode('ascii'))
+    return b'Bearer {}'.format(
+        base64.urlsafe_b64encode(
+            json.dumps(token)
+            .encode('utf-8'))
+        .decode('ascii')
+    )
 
 
 def client_auth_headers(username, password=None):
