@@ -2,7 +2,10 @@
 from __future__ import absolute_import
 
 import base64
+import datetime
 import json
+
+import jwt
 
 from . import names
 
@@ -15,22 +18,30 @@ def swagger_basic_auth(swagger_client, username, password):
     swagger_client.api_client.default_headers[header_key] = header_value
 
 
-def enc_token(token):
-    return b'Bearer {}'.format(
-        base64.urlsafe_b64encode(
-            json.dumps(token)
-            .encode('utf-8'))
-        .decode('ascii')
+def seconds_from_now(seconds):
+    return datetime.datetime.utcnow() + datetime.timedelta(seconds=seconds)
+
+
+def obo_token(secret_key, obo_user):
+    return jwt.encode(
+        payload={
+            # standard claim fields
+            'iat': seconds_from_now(0),
+            'exp': seconds_from_now(30),
+            # custom fields
+            'dibbs-user': obo_user,
+        },
+        key=secret_key,
+        algorithm='HS256',
     )
 
 
-def client_auth_headers(username, password=None):
+def obo_headers(secret_key, obo_user):
     """
-    This generates an UNSIGNED token, i.e. FIX ME (and the thing that consumes
-    it)
+    This generates an signed token
     """
-    token = enc_token({'dibbs_user': username, 'password': password})
+    token = obo_token(secret_key, obo_user)
 
     return {
-        names.AUTHORIZATION_HEADER: token,
+        names.INTERSERVICE_HEADER: token,
     }

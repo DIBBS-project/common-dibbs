@@ -13,15 +13,15 @@ from django.conf import settings
 from django.contrib.auth import backends as django_backends
 from django.core.exceptions import PermissionDenied
 from django.http import HttpResponseBadRequest
+import jwt
 import requests
 from rest_framework.authentication import BaseAuthentication
 
+from .auth import obo_headers as _auth_obo_headers
 from .misc import header_to_metakey
 from . import names
 
 __all__ = [
-    'AUTHORIZATION_HEADER',
-    'INTERSERVICE_HEADER',
     'CASUserBridgeMiddleware',
     'InterserviceMiddleware',
     'relay_headers',
@@ -49,30 +49,27 @@ class CASUserBridgeMiddleware(object):
 
     def process_request(self, request):
         try:
-            auth_header = request.META.pop(names.AUTHORIZATION_HEADER_KEY)
+            auth_header = request.META.pop(names.AUTHORIZATION_HEADER_METAKEY)
         except KeyError:
             return
 
         # save token for easier forwarding
         request.dibbs_token = auth_header
 
-        bearer_prefix = b'Bearer '
-        if not auth_header.startswith(bearer_prefix):
-            return HttpResponseBadRequest('Token (Bearer) auth only.')
-        auth_header = auth_header[len(bearer_prefix):]
-        auth_data = json.loads(base64.urlsafe_b64decode(auth_header).decode('utf-8'))
+        response = requests.get(
+            url='{}/auth/tokens'.format(settings.DIBBS['urls']['cas']),
+            headers={
+                names.AUTHORIZATION_HEADER: auth_header,
+            },
+        )
+        if response.status_code != 200:
+            self.logger.info('failed to authenticate user (provided token: \'{}\')'.format(auth_header))
+            raise PermissionDenied('authentication failed')
 
-        self.logger.debug('provided auth_data: {}'.format(json.dumps(auth_data)))
+        auth_data = response.json()
+        self.logger.debug('provided auth_data: {}'.format(auth_data))
 
-        # TODO: verify the auth payload against the CAS and get the username
-        dibbs_user = auth_data['dibbs_user']
-        # HACK: pretend users
-        self.logger.info('user = \'{}\''.format(dibbs_user))
-
-        if dibbs_user not in ['alice', 'bob', 'cindy', 'dave']:
-            self.logger.info('failed to authenticate user (provided: \'{}\')'.format(dibbs_user))
-            raise PermissionDenied('non-existant user. go away.')
-
+        dibbs_user = auth_data['username']
         self.logger.info('authenticated user/REMOTE_USER set as: \'{}\''.format(dibbs_user))
         request.META['REMOTE_USER'] = dibbs_user
 
@@ -87,11 +84,30 @@ class InterserviceMiddleware(object):
         self.logger = logging.getLogger('{}.{}'.format(__name__, self.__class__.__name__))
 
     def process_request(self, request):
-        # TODO: secure this (shared secret or whatever)
-        if request.META.get(names.INTERSERVICE_HEADER_KEY, False):
-            request.dibbs_interservice = True
-        else:
-            request.dibbs_interservice = False
+        request.dibbs_interservice = False
+        jwt_key = settings.DIBBS['shared_secret']
+        try:
+            token = request.META[names.INTERSERVICE_HEADER_METAKEY]
+        except KeyError:
+            return
+
+        try:
+            payload = jwt.decode(
+                token,
+                key=jwt_key,
+                algorithms=['HS256'],
+                leeway=10, # seconds
+                # https://github.com/jpadilla/pyjwt/issues/190
+                options={'verify_iat': False},
+            )
+        except jwt.exceptions.InvalidTokenError as e:
+            logger.info('refused token "{}" because "{}"'.format(token[:2000], str(e)))
+            raise PermissionDenied(str(e))
+
+        dibbs_user = payload['dibbs-user']
+        logger.info('authenticated "{}" via interservice signed token'.format(dibbs_user))
+        request.dibbs_interservice = True
+        request.META['REMOTE_USER'] = dibbs_user
 
 
 class DRFAuthentication(BaseAuthentication):
@@ -117,15 +133,17 @@ class DRFAuthentication(BaseAuthentication):
         return (user, None)
 
 
-def relay_headers(incoming_request):
-    return {
-        names.AUTHORIZATION_HEADER: incoming_request.dibbs_token,
-        names.INTERSERVICE_HEADER: True,
-    }
+def obo_headers(obo_user):
+    """
+    Convienence for ``common_dibbs.auth.obo_headers`` that pulls in the
+    shared key from Django settings.
+    """
+    key = settings.DIBBS['shared_secret']
+    return _auth_obo_headers(key, obo_user)
 
 
 def relay_swagger(swagger_client, incoming_request=None):
-    headers = relay_headers(incoming_request)
+    headers = obo_headers(incoming_request.user.username)
     swagger_client.api_client.default_headers.update(headers)
 
 

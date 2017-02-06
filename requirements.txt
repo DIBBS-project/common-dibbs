@@ -1,3 +1,5 @@
 six
+pyjwt
+requests
 urllib3
 certifi
